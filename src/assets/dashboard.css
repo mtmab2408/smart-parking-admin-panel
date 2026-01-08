@@ -1,0 +1,298 @@
+.page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0f0f0f, #3a3a3a);
+  font-family: Arial, sans-serif;
+  padding: 32px 16px;
+  color: white;
+}
+
+.dashboard {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 32px;
+  letter-spacing: 0.5px;
+}
+
+.subtitle {
+  margin: 6px 0 0;
+  opacity: 0.8;
+}
+
+.status {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  max-width: 420px;
+}
+
+.pill {
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 13px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.pill-error {
+  border-color: rgba(255, 0, 0, 0.35);
+}
+
+.pill-info {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pill-success {
+  border-color: rgba(0, 255, 0, 0.35);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 460px;
+  max-height: 460px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 25px;
+  padding: 18px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.count {
+  font-size: 12px;
+  opacity: 0.85;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+input {
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+input:focus {
+  border-color: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding-right: 6px;
+}
+.slots-panel .list {
+  flex: 1 1 auto;
+}
+
+.item-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.item-card.is-selected {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.item-card:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.item-main {
+  min-width: 0;
+}
+
+.item-title {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  opacity: 0.8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.empty {
+  opacity: 0.8;
+  font-size: 13px;
+  padding: 10px 4px;
+}
+
+.btn {
+  padding: 10px 14px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 0.95;
+}
+
+.btn-primary {
+  background-color: #2f2f2f;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #4b4b4b;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.btn-danger {
+  background: rgba(255, 0, 0, 0.18);
+  color: white;
+  border: 1px solid rgba(255, 0, 0, 0.35);
+}
+
+.btn-small {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.slot-meta {
+  margin-bottom: 10px;
+}
+
+.slot-card {
+  align-items: center;
+}
+
+.slot-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.slots-panel {
+  margin-top: 20px;
+  height: 520px;
+  max-height: 520px;
+}
+
+.slots-panel .slot-body {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.slots-panel .slot-meta,
+.slots-panel .form {
+  flex-shrink: 0;
+}
+
+.slots-panel .list {
+  flex: 1 1 auto;
+  overflow-y: auto;
+}
+
+@media (max-width: 720px) {
+  .panel {
+    height: 520px;
+    max-height: 520px;
+  }
+
+  .slots-panel {
+    height: 560px;
+    max-height: 560px;
+  }
+}
