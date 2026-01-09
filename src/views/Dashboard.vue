@@ -229,6 +229,10 @@ const startEditAdmin = (admin) => {
 
 const deleteAdmin = async (id) => {
   error.value = "";
+  if (admins.value.length <= 1) {
+    showError("atleast one admin must be present in the system at all times");
+    return;
+  }
   try {
     await api.deleteAdmin(id);
     admins.value = admins.value.filter((admin) => admin.id !== id);
