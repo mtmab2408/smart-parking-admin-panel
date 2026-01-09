@@ -20,8 +20,13 @@ defineEmits(["clear"]);
 @use "../assets/theme" as *;
 
 .error-banner {
-  background: rgba($danger, 0.16);
-  border: 1px solid rgba($danger, 0.4);
+  background: linear-gradient(
+      135deg,
+      rgba($danger, 0.22),
+      rgba($danger, 0.06)
+    ),
+    rgba(10, 12, 16, 0.85);
+  border: 1px solid rgba($danger, 0.45);
   color: $ink;
   padding: 12px 14px;
   border-radius: 14px;
