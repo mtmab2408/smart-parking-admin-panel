@@ -1,5 +1,6 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from "vue";
+import { useRouter } from "vue-router";
 import api from "../services/api";
 import ErrorBanner from "../components/ErrorBanner.vue";
 import AdminsSection from "../components/AdminsSection.vue";
@@ -11,6 +12,7 @@ const lots = ref([]);
 const slots = ref([]);
 const loading = ref(false);
 const error = ref("");
+const router = useRouter();
 const showError = (message) => {
   error.value = message || "";
 };
@@ -357,6 +359,11 @@ const toggleSlotOccupancy = async (slot) => {
     error.value = "Could not update slot status.";
   }
 };
+
+//works for now
+const handleSignOut = () => {
+  router.push({ name: "login" });
+};
 </script>
 
 <template>
@@ -370,6 +377,9 @@ const toggleSlotOccupancy = async (slot) => {
 
         <div class="status">
           <span v-if="loading" class="pill pill-info">Loading…</span>
+          <button class="btn btn-danger btn-small" @click="handleSignOut">
+            Sign out
+          </button>
         </div>
       </header>
 
