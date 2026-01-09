@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Smart Parking logo">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#111"/>
+      <stop offset="1" stop-color="#666"/>
+    </linearGradient>
+  </defs>
+  <rect x="24" y="24" width="208" height="208" rx="44" fill="none" stroke="#111" stroke-width="14"/>
+  <path d="M96 184V72h58c28 0 46 18 46 41s-18 41-46 41h-34v30z
+           M120 128h34c13 0 22-8 22-15s-9-15-22-15h-34z"
+        fill="url(#g)"/>
+  <path d="M168 72c14 0 26 6 35 15" fill="none" stroke="#666" stroke-width="10" stroke-linecap="round"/>
+  <path d="M168 52c22 0 41 9 55 23" fill="none" stroke="#999" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="206" cy="94" r="6" fill="#111"/>
+</svg>

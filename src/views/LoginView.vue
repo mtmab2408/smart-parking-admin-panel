@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import api from "../services/api";
 import ErrorBanner from "../components/ErrorBanner.vue";
+import logoUrl from "../assets/smart-parking-logo.svg";
 
 const username = ref("");
 const password = ref("");
@@ -36,6 +37,9 @@ const handleLogin = async () => {
 <template>
   <div class="login-container">
     <div class="login-box">
+      <div class="brand-logo">
+        <img :src="logoUrl" alt="Smart Parking logo" />
+      </div>
       <h1>Smart Parking System</h1>
 
       <ErrorBanner :message="error" @clear="error = ''" />
@@ -68,6 +72,24 @@ const handleLogin = async () => {
   border-radius: 25px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.brand-logo {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 12px;
+}
+
+.brand-logo svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.brand-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .login-form {

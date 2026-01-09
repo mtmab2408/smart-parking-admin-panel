@@ -6,6 +6,7 @@ import ErrorBanner from "../components/ErrorBanner.vue";
 import AdminsSection from "../components/AdminsSection.vue";
 import LotsSection from "../components/LotsSection.vue";
 import SlotsSection from "../components/SlotsSection.vue";
+import logoUrl from "../assets/smart-parking-logo.svg";
 
 const admins = ref([]);
 const lots = ref([]);
@@ -410,9 +411,14 @@ const handleSignOut = () => {
     </div>
     <main class="dashboard">
       <header class="header">
-        <div>
-          <h1>Dashboard</h1>
-          <p class="subtitle">Manage admins and parking lots</p>
+        <div class="brand">
+          <div class="brand-logo">
+            <img :src="logoUrl" alt="Smart Parking logo" />
+          </div>
+          <div>
+            <h1>Dashboard</h1>
+            <p class="subtitle">Manage admins and parking lots</p>
+          </div>
         </div>
 
         <div class="status">
