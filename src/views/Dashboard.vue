@@ -13,6 +13,8 @@ const slots = ref([]);
 const loading = ref(false);
 const error = ref("");
 const router = useRouter();
+const toasts = ref([]);
+const toastId = ref(0);
 const showError = (message) => {
   error.value = message || "";
 };
@@ -50,6 +52,16 @@ const resetAdminForm = () => {
   newAdmin.value = { username: "", password: "" };
   editAdminId.value = null;
   editAdmin.value = { username: "", password: "" };
+};
+
+const addToast = (message, type = "success") => {
+  const id = (toastId.value += 1);
+  toasts.value.push({ id, message, type });
+  setTimeout(() => removeToast(id), 3000);
+};
+
+const removeToast = (id) => {
+  toasts.value = toasts.value.filter((toast) => toast.id !== id);
 };
 
 const slotNumberInput = computed({
@@ -211,9 +223,11 @@ const submitAdmin = async () => {
           ? { ...admin, username: editAdmin.value.username }
           : admin
       );
+      addToast("Admin updated.");
     } else {
       const res = await api.createAdmin(newAdmin.value);
       admins.value.push(res.data);
+      addToast("Admin added.");
     }
     resetAdminForm();
   } catch (err) {
@@ -237,6 +251,7 @@ const deleteAdmin = async (id) => {
     await api.deleteAdmin(id);
     admins.value = admins.value.filter((admin) => admin.id !== id);
     if (editAdminId.value === id) resetAdminForm();
+    addToast("Admin deleted.");
   } catch (err) {
     console.error(err);
     error.value = "Could not delete admin.";
@@ -274,6 +289,7 @@ const addLot = async () => {
     lots.value.push(res.data);
     newLot.value = { name: "", address: "", latitude: "", longitude: "" };
     selectedLotId.value = res?.data?.id ?? selectedLotId.value;
+    addToast("Parking lot added.");
   } catch (err) {
     console.error(err);
     error.value = "Could not add parking lot.";
@@ -286,6 +302,7 @@ const deleteLot = async (id) => {
     await api.deleteLot(id);
     lots.value = lots.value.filter((lot) => lot.id !== id);
     if (selectedLotId.value === id) selectedLotId.value = null;
+    addToast("Parking lot deleted.");
   } catch (err) {
     console.error(err);
     error.value = "Could not delete parking lot.";
@@ -317,10 +334,12 @@ const submitSlot = async () => {
       slots.value = slots.value.map((slot) =>
         slot.id === editSlotId.value ? { ...slot, ...updated } : slot
       );
+      addToast("Slot updated.");
     } else {
       const res = await api.createSlot(selectedLotId.value, payload);
       const created = ensureSlotHasLot(res.data, selectedLotId.value);
       slots.value.push(created);
+      addToast("Slot added.");
     }
     resetSlotForm();
   } catch (err) {
@@ -343,6 +362,7 @@ const deleteSlot = async (id) => {
     await api.deleteSlot(id);
     slots.value = slots.value.filter((slot) => slot.id !== id);
     if (editSlotId.value === id) resetSlotForm();
+    addToast("Slot deleted.");
   } catch (err) {
     console.error(err);
     error.value = "Could not delete slot.";
@@ -358,6 +378,8 @@ const toggleSlotOccupancy = async (slot) => {
     slots.value = slots.value.map((item) =>
       item.id === slot.id ? { ...item, ...updated } : item
     );
+    const statusLabel = targetStatus ? "occupied" : "available";
+    addToast(`Slot marked ${statusLabel}.`);
   } catch (err) {
     console.error(err);
     error.value = "Could not update slot status.";
@@ -372,6 +394,20 @@ const handleSignOut = () => {
 
 <template>
   <div class="page">
+    <div class="toast-stack" aria-live="polite">
+      <div
+        v-for="toast in toasts"
+        :key="toast.id"
+        class="toast"
+        :class="`toast-${toast.type}`"
+        role="status"
+      >
+        <span>{{ toast.message }}</span>
+        <button class="toast-close" type="button" @click="removeToast(toast.id)">
+          ×
+        </button>
+      </div>
+    </div>
     <main class="dashboard">
       <header class="header">
         <div>
