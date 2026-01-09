@@ -41,92 +41,112 @@ const handleLogin = async () => {
         <img :src="logoUrl" alt="Smart Parking logo" />
       </div>
       <h1>Smart Parking System</h1>
+      <p class="login-subtitle">Sign in to manage lots, slots, and admins.</p>
 
       <ErrorBanner :message="error" @clear="error = ''" />
 
       <form @submit.prevent="handleLogin" class="login-form">
         <input v-model="username" type="text" placeholder="Username" />
         <input v-model="password" type="password" placeholder="Password" />
-        <button type="submit">Log In</button>
+        <button class="login-button" type="submit">Log In</button>
       </form>
     </div>
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
+@use "../assets/theme" as *;
+
 .login-container {
   min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: radial-gradient(circle at top, rgba(70, 214, 255, 0.16), transparent 60%),
+    linear-gradient(160deg, $bg-base, $bg-deep 55%, $bg-soft 100%);
+  position: relative;
+  overflow: hidden;
+}
 
-  background: linear-gradient(180deg, #0f0f0f, #3a3a3a);
-  font-family: Arial, sans-serif;
+.login-container::before {
+  content: "";
+  position: absolute;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(57, 229, 143, 0.2), transparent 70%);
+  top: -140px;
+  right: -120px;
+  opacity: 0.6;
+  pointer-events: none;
 }
 
 .login-box {
-  color: white;
-  width: 300px;
-  padding: 30px;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 25px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  @include glass-panel;
+  color: $ink;
+  width: min(420px, 92vw);
+  padding: 32px 30px;
+  text-align: left;
 }
 
 .brand-logo {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 12px;
+  margin: 0 0 18px;
 }
 
-.brand-logo svg {
-  display: block;
-  width: 100%;
-  height: 100%;
+h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-family: $font-display;
 }
 
-.brand-logo img {
-  display: block;
-  width: 100%;
-  height: 100%;
+.login-subtitle {
+  margin: 0 0 20px;
+  color: $ink-muted;
 }
 
 .login-form {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 14px;
 }
 
 input {
-  border-radius: 10px;
-  padding: 10px 12px;
+  border-radius: 12px;
+  padding: 12px 14px;
   font-size: 14px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(255, 255, 255, 0.08);
-  color: white;
+  color: $ink;
   outline: none;
-  transition: border-color 0.2s ease, background 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus-visible {
+    border-color: rgba($accent, 0.5);
+    background: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 3px rgba($accent, 0.15);
+  }
 }
 
-input:focus {
-  border-color: rgba(255, 255, 255, 0.35);
-  background: rgba(255, 255, 255, 0.12);
-}
-
-button {
-  padding: 10px;
-  background-color: #2f2f2f;
-  color: white;
-  border-radius: 25px;
+.login-button {
+  margin-top: 6px;
+  padding: 12px 16px;
+  border-radius: 999px;
   border: none;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.2s ease, opacity 0.2s ease;
-}
+  font-size: 15px;
+  font-weight: 600;
+  color: #05121a;
+  background: linear-gradient(135deg, $accent-strong, $accent);
+  box-shadow: 0 10px 20px rgba($accent, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-button:hover {
-  background-color: #4b4b4b;
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 12px 24px rgba($accent, 0.3);
+  }
+
+  &:focus-visible {
+    @include focus-ring();
+  }
 }
 </style>

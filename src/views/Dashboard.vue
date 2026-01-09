@@ -539,4 +539,4 @@ const handleSignOut = () => {
   </div>
 </template>
 
-<style src="../assets/dashboard.css"></style>
+<style src="../assets/dashboard.scss" lang="scss"></style>

@@ -16,27 +16,34 @@ defineProps({
 defineEmits(["clear"]);
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@use "../assets/theme" as *;
+
 .error-banner {
-  background: rgba(255, 0, 0, 0.15);
-  border: 1px solid rgba(255, 0, 0, 0.35);
-  color: white;
-  padding: 10px 14px;
-  border-radius: 12px;
+  background: rgba($danger, 0.16);
+  border: 1px solid rgba($danger, 0.4);
+  color: $ink;
+  padding: 12px 14px;
+  border-radius: 14px;
   margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
+  box-shadow: $shadow-sm;
 }
 
 .clear-error {
   background: transparent;
   border: none;
-  color: white;
+  color: $ink;
   font-size: 18px;
   cursor: pointer;
   line-height: 1;
   padding: 0 6px;
+
+  &:focus-visible {
+    @include focus-ring($danger);
+  }
 }
 </style>
