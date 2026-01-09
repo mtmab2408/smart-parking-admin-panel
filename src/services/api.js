@@ -8,6 +8,8 @@ const apiClient = axios.create({
   },
 });
 
+export const API_BASE_URL = apiClient.defaults.baseURL;
+
 export default {
   // PARKING REQUESTS
   getSlots() {

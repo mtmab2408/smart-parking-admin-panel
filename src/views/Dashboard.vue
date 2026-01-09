@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import api from "../services/api";
+import api, { API_BASE_URL } from "../services/api";
 import ErrorBanner from "../components/ErrorBanner.vue";
 import AdminsSection from "../components/AdminsSection.vue";
 import LotsSection from "../components/LotsSection.vue";
@@ -29,7 +29,9 @@ const selectedLotId = ref(null);
 const newSlot = ref({ slotNumber: "", sensorId: "" });
 const editSlotId = ref(null);
 const editSlot = ref({ slotNumber: "", sensorId: "" });
-const slotPoller = ref(null);
+const slotSocket = ref(null);
+const slotSocketReconnectTimer = ref(null);
+const shouldReconnect = ref(true);
 
 const adminUsername = computed({
   get: () =>
@@ -148,26 +150,74 @@ const selectLot = (lot) => {
   selectedLotId.value = lot?.id ?? null;
 };
 
-const stopSlotPolling = () => {
-  if (slotPoller.value) {
-    clearInterval(slotPoller.value);
-    slotPoller.value = null;
+const clearSlotSocketReconnect = () => {
+  if (slotSocketReconnectTimer.value) {
+    clearTimeout(slotSocketReconnectTimer.value);
+    slotSocketReconnectTimer.value = null;
   }
 };
 
-const loadSlots = async () => {
+const buildSlotSocketUrl = () => {
+  const url = new URL(API_BASE_URL);
+  url.protocol = url.protocol === "https:" ? "wss:" : "ws:";
+  url.pathname = "/ws/slots";
+  url.search = "";
+  return url.toString();
+};
+
+const closeSlotSocket = ({ suppressReconnect = false } = {}) => {
+  clearSlotSocketReconnect();
+  if (!slotSocket.value) return;
+  if (suppressReconnect) {
+    slotSocket.value.onclose = null;
+    slotSocket.value.onerror = null;
+  }
+  slotSocket.value.close();
+  slotSocket.value = null;
+};
+
+const scheduleSlotSocketReconnect = () => {
+  if (!shouldReconnect.value || slotSocketReconnectTimer.value) return;
+  slotSocketReconnectTimer.value = setTimeout(() => {
+    slotSocketReconnectTimer.value = null;
+    connectSlotSocket();
+  }, 2000);
+};
+
+const handleSlotSocketMessage = (event) => {
   try {
-    const slotsRes = await api.getSlots();
-    slots.value = slotsRes?.data ?? [];
+    const payload = JSON.parse(event.data);
+    if (Array.isArray(payload)) {
+      slots.value = payload;
+      return;
+    }
+    if (payload?.slots) {
+      slots.value = payload.slots;
+    }
   } catch (err) {
-    console.error(err);
-    error.value = "Could not refresh slots.";
+    console.error("Failed to parse slot socket message.", err);
   }
 };
 
-const startSlotPolling = () => {
-  stopSlotPolling();
-  slotPoller.value = setInterval(loadSlots, 1000);
+const connectSlotSocket = () => {
+  closeSlotSocket({ suppressReconnect: true });
+  let socket;
+  try {
+    socket = new WebSocket(buildSlotSocketUrl());
+  } catch (err) {
+    console.error("Failed to open slot socket.", err);
+    scheduleSlotSocketReconnect();
+    return;
+  }
+  slotSocket.value = socket;
+  socket.onmessage = handleSlotSocketMessage;
+  socket.onerror = (event) => {
+    console.error("Slot socket error.", event);
+  };
+  socket.onclose = () => {
+    slotSocket.value = null;
+    scheduleSlotSocketReconnect();
+  };
 };
 
 const loadData = async () => {
@@ -189,7 +239,6 @@ const loadData = async () => {
       );
       if (!stillExists) selectedLotId.value = null;
     }
-    startSlotPolling();
   } catch (err) {
     console.error(err);
     error.value = "Could not load dashboard data.";
@@ -198,8 +247,14 @@ const loadData = async () => {
   }
 };
 
-onMounted(loadData);
-onUnmounted(stopSlotPolling);
+onMounted(async () => {
+  await loadData();
+  connectSlotSocket();
+});
+onUnmounted(() => {
+  shouldReconnect.value = false;
+  closeSlotSocket({ suppressReconnect: true });
+});
 
 const submitAdmin = async () => {
   showError("");
